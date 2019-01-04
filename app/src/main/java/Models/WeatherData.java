@@ -1,34 +1,53 @@
-package pt.ua.icm.weatherapp;
+package Models;
+
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+@Entity(tableName = "weather_table", primaryKeys = {"globalIdLocal", "forecastDate"})
 public class WeatherData {
 
     @SerializedName("precipitaProb")
     @Expose
     private String precipitaProb;
+
     @SerializedName("tMin")
     @Expose
     private String tMin;
+
     @SerializedName("tMax")
     @Expose
     private String tMax;
+
     @SerializedName("predWindDir")
     @Expose
     private String predWindDir;
+
     @SerializedName("idWeatherType")
     @Expose
     private int idWeatherType;
+
     @SerializedName("classWindSpeed")
     @Expose
     private int classWindSpeed;
+
     @SerializedName("longitude")
     @Expose
     private String longitude;
+
+    @NonNull
     @SerializedName("forecastDate")
     @Expose
     private String forecastDate;
+
+    @NonNull
+    @Expose
+    private int globalIdLocal;
+
+
     @SerializedName("latitude")
     @Expose
     private String latitude;
@@ -103,6 +122,15 @@ public class WeatherData {
 
     public void setLatitude(String latitude) {
         this.latitude = latitude;
+    }
+
+    @NonNull
+    public int getGlobalIdLocal() {
+        return globalIdLocal;
+    }
+
+    public void setGlobalIdLocal(@NonNull int globalIdLocal) {
+        this.globalIdLocal = globalIdLocal;
     }
 
     @Override

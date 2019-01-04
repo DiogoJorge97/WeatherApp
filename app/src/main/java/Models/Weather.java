@@ -1,17 +1,15 @@
-package pt.ua.icm.weatherapp;
+package Models;
 
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
 import java.util.List;
 
-@Entity(tableName = "weather_table")
 public class Weather {
 
     @SerializedName("owner")
@@ -35,6 +33,17 @@ public class Weather {
     @SerializedName("dataUpdate")
     @Expose
     private String dataUpdate;
+
+    private Date lastRefresh;
+
+    public Weather(String owner, String country, List<WeatherData> data, @NonNull int globalIdLocal, String dataUpdate, Date lastRefresh) {
+        this.owner = owner;
+        this.country = country;
+        this.data = data;
+        this.globalIdLocal = globalIdLocal;
+        this.dataUpdate = dataUpdate;
+        this.lastRefresh = lastRefresh;
+    }
 
     public String getOwner() {
         return owner;
@@ -85,5 +94,13 @@ public class Weather {
                 ", globalIdLocal=" + globalIdLocal +
                 ", dataUpdate='" + dataUpdate + '\'' +
                 '}';
+    }
+
+    public Date getLastRefresh() {
+        return lastRefresh;
+    }
+
+    public void setLastRefresh(Date lastRefresh) {
+        this.lastRefresh = lastRefresh;
     }
 }
