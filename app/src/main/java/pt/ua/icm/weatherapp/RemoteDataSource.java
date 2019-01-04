@@ -1,5 +1,6 @@
 package pt.ua.icm.weatherapp;
 
+import Models.Distrit;
 import Models.Weather;
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -10,8 +11,11 @@ public interface RemoteDataSource {
 
 
 
-    @GET("/open-data/forecast/meteorology/cities/daily/{localId}.json")
+    @GET("forecast/meteorology/cities/daily/{localId}.json")
     Call<Weather> getWeather(@Path("localId") int localId);
+
+    @GET("distrits-islands.json")
+    Call<Distrit> getCities();
 
 
 

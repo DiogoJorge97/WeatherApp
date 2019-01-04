@@ -18,9 +18,6 @@ public interface WeatherDao {
     @Insert(onConflict = REPLACE)
     void save(WeatherData weatherData);
 
-    @Insert
-    void insert(WeatherData weatherData);
-
     @Query("DELETE FROM weather_table")
     void deleteAll();
 

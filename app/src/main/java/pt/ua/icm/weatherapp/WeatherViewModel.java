@@ -6,6 +6,7 @@ import android.arch.lifecycle.LiveData;
 
 import java.util.List;
 
+import Models.DistritsData;
 import Models.WeatherData;
 
 public class WeatherViewModel extends AndroidViewModel {
@@ -18,7 +19,9 @@ public class WeatherViewModel extends AndroidViewModel {
         mRepository = new WeaterRepository(application);
     }
 
-    LiveData<List<WeatherData>> getmAllWeatherData(int globalID) { return mRepository.getAllWeatherData(globalID); }
+    LiveData<List<DistritsData>> getAllDistritData() { return mRepository.getAllDistrits();}
 
-    public void insert(WeatherData weatherData) { mRepository.insert(weatherData); }
+    LiveData<List<WeatherData>> getAllWeatherData(int globalID) { return mRepository.getAllWeatherData(globalID); }
+
+    public void insert(WeatherData weatherData) { mRepository.insertWeather(weatherData); }
 }

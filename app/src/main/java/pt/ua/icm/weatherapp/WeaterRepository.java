@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import Models.Distrit;
+import Models.DistritsData;
 import Models.Weather;
 import Models.WeatherData;
 import retrofit2.Call;
@@ -31,11 +33,13 @@ public class WeaterRepository {
     private final Executor executor;
 
     private WeatherDao weatherDao;
+    private DistritDao distritDao;
     private LiveData<List<WeatherData>> mAllWeather;
 
     public WeaterRepository(Application application) {
         WeatherRoomDatabase db = WeatherRoomDatabase.getDatabase(application);
         weatherDao = db.weatherDao();
+        distritDao = db.distritDao();
 
         //mAllWeather = weatherDao.getAllWeatherData(1010500);
 
@@ -48,9 +52,66 @@ public class WeaterRepository {
                 .build();
 
         remoteDataSource = retrofit.create(RemoteDataSource.class);
-
         executor = Executors.newSingleThreadExecutor();
 
+    }
+
+
+    public LiveData<List<DistritsData>> getAllDistrits(){
+        refresDistrit(); // try to refresh data if possible from Api
+        LiveData<List<DistritsData>> distritDataList = distritDao.getAllDistrits(); // return a LiveData directly from the database
+        return distritDataList;
+    }
+
+
+    private void refresDistrit() {
+        executor.execute(() -> {
+            // Check if user was fetched recently
+            boolean dataExists = (distritDao.hasData() != null);
+            Log.d("MyTag", "Distrit data exists in Room: " + dataExists);
+            // If user have to be updated
+            if (!dataExists) {
+                remoteDataSource.getCities().enqueue(new Callback<Distrit>() {
+                    @Override
+                    public void onResponse(Call<Distrit> call, Response<Distrit> response) {
+                        executor.execute(() -> {
+                            List<DistritsData> dataList = response.body().getData();
+                            for (DistritsData distritsData : dataList) {
+                                distritDao.save(distritsData);
+                                insertDistrit(distritsData);
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onFailure(Call<Distrit> call, Throwable t) {
+
+                    }
+
+
+                });
+            }
+        });
+    }
+
+    private void insertDistrit(DistritsData distritsData) {
+        new insertAsyncTaskDistrit(distritDao).execute(distritsData);
+
+    }
+
+    private static class insertAsyncTaskDistrit extends AsyncTask<DistritsData, Void, Void> {
+
+        private DistritDao mAsyncTaskDao;
+
+        insertAsyncTaskDistrit(DistritDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final DistritsData... params) {
+            mAsyncTaskDao.save(params[0]);
+            return null;
+        }
     }
 
 
@@ -65,57 +126,49 @@ public class WeaterRepository {
             // Check if user was fetched recently
             //boolean weatherExists = (weatherDao.get(globalID, getMaxRefreshTime(new Date())) != null);
             boolean dataExists = (weatherDao.hasData(globalID) != null);
-            Log.d("MyTag","Data exists in Room: " + dataExists);
+            Log.d("MyTag", "Weather data exists in Room: " + dataExists);
             // If user have to be updated
             if (!dataExists) {
-            remoteDataSource.getWeather(globalID).enqueue(new Callback<Weather>() {
-                @Override
-                public void onResponse(Call<Weather> call, Response<Weather> response) {
-                    executor.execute(() -> {
-                        Weather weather = response.body();
+                remoteDataSource.getWeather(globalID).enqueue(new Callback<Weather>() {
+                    @Override
+                    public void onResponse(Call<Weather> call, Response<Weather> response) {
+                        executor.execute(() -> {
+                            Weather weather = response.body();
 
-                        List<WeatherData> dataList = response.body().getData();
-                        String logMessage = "";
-                        boolean flag = false;
-                        for (WeatherData weatherData : dataList) {
-                            logMessage += "Id: " + globalID + " | Date:" + weatherData.getForecastDate() + "\n";
-                            weatherDao.save(weatherData);
-                            if (flag == false){
-                                insert(weatherData);
+                            List<WeatherData> dataList = response.body().getData();
+                            for (WeatherData weatherData : dataList) {
+                                weatherDao.save(weatherData);
+                                insertWeather(weatherData);
                                 weatherData.setGlobalIdLocal(globalID);
-                                flag = true;
                             }
-                        }
-                        Log.d("MyTag", logMessage);
-                        weather.setLastRefresh(new Date());
-                    });
-                }
+                            weather.setLastRefresh(new Date());
+                        });
+                    }
 
-                @Override
-                public void onFailure(Call<Weather> call, Throwable t) {
+                    @Override
+                    public void onFailure(Call<Weather> call, Throwable t) {
 
-                }
-            });
+                    }
+                });
             }
         });
     }
 
-
-    public void insert (WeatherData weatherData) {
-        new insertAsyncTask(weatherDao).execute(weatherData);
+    public void insertWeather(WeatherData weatherData) {
+        new insertAsyncTaskWeather(weatherDao).execute(weatherData);
     }
 
-    private static class insertAsyncTask extends AsyncTask<WeatherData, Void, Void> {
+    private static class insertAsyncTaskWeather extends AsyncTask<WeatherData, Void, Void> {
 
         private WeatherDao mAsyncTaskDao;
 
-        insertAsyncTask(WeatherDao dao) {
+        insertAsyncTaskWeather(WeatherDao dao) {
             mAsyncTaskDao = dao;
         }
 
         @Override
         protected Void doInBackground(final WeatherData... params) {
-            mAsyncTaskDao.insert(params[0]);
+            mAsyncTaskDao.save(params[0]);
             return null;
         }
     }
