@@ -23,14 +23,17 @@ public class MainActivity extends AppCompatActivity {
 
 
         WeatherViewModel weatherViewModel = ViewModelProviders.of(this).get(WeatherViewModel.class);
-        weatherViewModel.getmAllWeatherData().observe(this, weatherData -> updateUI(weatherData));
+        weatherViewModel.getmAllWeatherData(1010500).observe(this, this::updateUI);
 
 
 
 
     }
 
-    private void updateUI(List<WeatherData> weatherData) {
+    private void updateUI(List<WeatherData> weatherDataList) {
+        for (WeatherData weatherData: weatherDataList){
+
+        }
 
     }
 }

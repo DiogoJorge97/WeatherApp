@@ -28,4 +28,8 @@ public interface WeatherDao {
     LiveData<List<WeatherData>> getAllWeatherData(int globalId);
 
 
+    //TODO Add last Refres to te query
+    @Query("SELECT * FROM weather_table WHERE globalIdLocal = :globalId LIMIT 1")
+    WeatherData hasData(int globalId);
+
 }

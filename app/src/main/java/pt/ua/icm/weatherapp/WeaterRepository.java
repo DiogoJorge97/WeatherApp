@@ -37,7 +37,7 @@ public class WeaterRepository {
         WeatherRoomDatabase db = WeatherRoomDatabase.getDatabase(application);
         weatherDao = db.weatherDao();
 
-        mAllWeather = weatherDao.getAllWeatherData(1010500);
+        //mAllWeather = weatherDao.getAllWeatherData(1010500);
 
         Gson gson = new GsonBuilder().setDateFormat("dd-MM-yyyy").create();
 
@@ -56,31 +56,37 @@ public class WeaterRepository {
 
     public LiveData<List<WeatherData>> getAllWeatherData(int globalID) {
         refreshWeather(globalID); // try to refresh data if possible from Api
-        LiveData<List<WeatherData>> s = weatherDao.getAllWeatherData(globalID); // return a LiveData directly from the database
-        Log.d("MyTag", s.toString());
-        return s;
+        LiveData<List<WeatherData>> weatherData = weatherDao.getAllWeatherData(globalID); // return a LiveData directly from the database
+        return weatherData;
     }
 
     private void refreshWeather(final int globalID) {
         executor.execute(() -> {
             // Check if user was fetched recently
             //boolean weatherExists = (weatherDao.get(globalID, getMaxRefreshTime(new Date())) != null);
+            boolean dataExists = (weatherDao.hasData(globalID) != null);
+            Log.d("MyTag","Data exists in Room: " + dataExists);
             // If user have to be updated
-            //if (!userExists) {
+            if (!dataExists) {
             remoteDataSource.getWeather(globalID).enqueue(new Callback<Weather>() {
                 @Override
                 public void onResponse(Call<Weather> call, Response<Weather> response) {
                     executor.execute(() -> {
                         Weather weather = response.body();
-                        int globalId = weather.getGlobalIdLocal();
 
                         List<WeatherData> dataList = response.body().getData();
-                        String toastMessage = "";
+                        String logMessage = "";
+                        boolean flag = false;
                         for (WeatherData weatherData : dataList) {
-                            toastMessage += "Id: " + globalId + " | Date:" + weatherData.getForecastDate() + "\n";
+                            logMessage += "Id: " + globalID + " | Date:" + weatherData.getForecastDate() + "\n";
                             weatherDao.save(weatherData);
+                            if (flag == false){
+                                insert(weatherData);
+                                weatherData.setGlobalIdLocal(globalID);
+                                flag = true;
+                            }
                         }
-                        Log.d("MyTag", toastMessage);
+                        Log.d("MyTag", logMessage);
                         weather.setLastRefresh(new Date());
                     });
                 }
@@ -90,9 +96,10 @@ public class WeaterRepository {
 
                 }
             });
-            //}
+            }
         });
     }
+
 
     public void insert (WeatherData weatherData) {
         new insertAsyncTask(weatherDao).execute(weatherData);

@@ -18,7 +18,7 @@ public class WeatherViewModel extends AndroidViewModel {
         mRepository = new WeaterRepository(application);
     }
 
-    LiveData<List<WeatherData>> getmAllWeatherData() { return mRepository.getAllWeatherData(1010500); }
+    LiveData<List<WeatherData>> getmAllWeatherData(int globalID) { return mRepository.getAllWeatherData(globalID); }
 
     public void insert(WeatherData weatherData) { mRepository.insert(weatherData); }
 }
