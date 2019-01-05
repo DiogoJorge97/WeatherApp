@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private List<String> distritList;
     private Map<Integer, String> windMap;
     private Map<Integer, String> identifierMap;
+    private int currentCity;
 
     private WeatherViewModel weatherViewModel;
     private AutoCompleteTextView autoCompleteTextView;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        currentCity = 1010500;
 
         distritMap = new HashMap<>();
         distritList = new ArrayList<>();
@@ -75,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         for (WeatherIdentifierData weatherIdentifierData: weatherIdentifierDataList){
             identifierMap.put(weatherIdentifierData.getIdWeatherType(), weatherIdentifierData.getDescIdWeatherTypePT());
         }
-        weatherViewModel.getWeatherData(1010500).observe(this, this::updateUI);
+        weatherViewModel.getWeatherData(currentCity).observe(this, this::updateUI);
 
     }
 
@@ -92,7 +94,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUI(List<WeatherData> weatherDataList) {
-        TextView last_update = findViewById(R.id.update);
         if(linearLayout.getChildCount() > 0){
             linearLayout.removeAllViews();
         }
@@ -110,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
                 TextView windDiretion = view.findViewById(R.id.wind_direction);
                 TextView preipitationProb = view.findViewById(R.id.prec_prob);
                 TextView date = view.findViewById(R.id.date);
-                View divider = view.findViewById(R.id.divider);
 
                 weatherData.setWeatherIdentifier(identifierMap.get(weatherData.getIdWeatherType()));
                 weatherData.setWindSpeed(windMap.get(weatherData.getClassWindSpeed()));
@@ -137,7 +137,10 @@ public class MainActivity extends AppCompatActivity {
             localId = distritsData.getGlobalIdLocal();
             localName = distritsData.getLocal();
             distritMap.put(localName, localId);
-            distritList.add(localName);
+        }
+        distritList.clear();
+        for (Map.Entry entry: distritMap.entrySet()){
+            distritList.add(entry.getKey().toString());
         }
 
         autoCompleteTextView = findViewById(R.id.auto_complete);
@@ -145,7 +148,8 @@ public class MainActivity extends AppCompatActivity {
         autoCompleteTextView.setAdapter(adapter);
         autoCompleteTextView.setOnItemClickListener((parent, arg1, pos, id) -> {
             Toast.makeText(MainActivity.this,"Distrito selecionado: " + adapter.getItem(pos), Toast.LENGTH_SHORT).show();
-            weatherViewModel.getWeatherData(distritMap.get(adapter.getItem(pos))).observe(MainActivity.this, MainActivity.this:: updateUI);
+            currentCity = distritMap.get(adapter.getItem(pos));
+            weatherViewModel.getWeatherData(currentCity).observe(MainActivity.this, MainActivity.this:: updateUI);
             hideKeyboard();
 
 
