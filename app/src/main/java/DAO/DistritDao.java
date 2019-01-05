@@ -1,4 +1,4 @@
-package pt.ua.icm.weatherapp;
+package DAO;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;

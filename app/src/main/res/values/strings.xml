@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">WeatherApp</string>
+    <string name="percentage">%</string>
+    <string name="Tmin">Tmin:</string>
+    <string name="Tmax">Tmax:</string>
+    <string name="aveiro">Aveiro</string>
+    <string name="refresh">Refresh</string>
+    <string name="day">DAY</string>
+    <string name="weathertype">WeatherType</string>
+    <string name="direction">Direction</string>
+    <string name="windspeed">WindSpeed</string>
+    <string name="precprob">precProb</string>
+    <string name="tmin">Tmin</string>
+    <string name="tmax">Tmax</string>
 </resources>

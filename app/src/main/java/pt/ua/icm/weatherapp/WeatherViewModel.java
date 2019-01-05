@@ -8,6 +8,8 @@ import java.util.List;
 
 import Models.DistritsData;
 import Models.WeatherData;
+import Models.WeatherIdentifierData;
+import Models.WindSpeedData;
 
 public class WeatherViewModel extends AndroidViewModel {
 
@@ -19,9 +21,18 @@ public class WeatherViewModel extends AndroidViewModel {
         mRepository = new WeaterRepository(application);
     }
 
-    LiveData<List<DistritsData>> getAllDistritData() { return mRepository.getAllDistrits();}
+    LiveData<List<DistritsData>> getAllDistritData() { return mRepository.getDistrits();}
 
-    LiveData<List<WeatherData>> getAllWeatherData(int globalID) { return mRepository.getAllWeatherData(globalID); }
+    LiveData<List<WindSpeedData>> getAllWindSpeed() { return mRepository.getWindSpeedData();}
+
+    LiveData<List<WeatherIdentifierData>> getAllWeatherIdentifier() { return mRepository.getWeatherIdentifier();}
+
+
+    LiveData<List<WeatherData>> getWeatherData(int globalid) { return mRepository.getWeatherData(globalid); }
+
+
 
     public void insert(WeatherData weatherData) { mRepository.insertWeather(weatherData); }
+
+    protected void refreshAll() { mRepository.refreshAll(); }
 }

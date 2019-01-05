@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
+
 @Entity(tableName = "weather_table", primaryKeys = {"globalIdLocal", "forecastDate"})
 public class WeatherData {
 
@@ -38,6 +40,10 @@ public class WeatherData {
     @Expose
     private String longitude;
 
+    @SerializedName("latitude")
+    @Expose
+    private String latitude;
+
     @NonNull
     @SerializedName("forecastDate")
     @Expose
@@ -47,10 +53,16 @@ public class WeatherData {
     @Expose
     private int globalIdLocal;
 
-
-    @SerializedName("latitude")
     @Expose
-    private String latitude;
+    private Date lastRefresh;
+
+    @Expose
+    private String windSpeed;
+
+    @Expose
+    private String weatherIdentifier;
+
+
 
     public String getPrecipitaProb() {
         return precipitaProb;
@@ -124,15 +136,39 @@ public class WeatherData {
         this.latitude = latitude;
     }
 
-    @NonNull
     public int getGlobalIdLocal() {
         return globalIdLocal;
     }
 
-    public void setGlobalIdLocal(@NonNull int globalIdLocal) {
+    public void setGlobalIdLocal(int globalIdLocal) {
         this.globalIdLocal = globalIdLocal;
     }
 
+    public Date getLastRefresh() {
+        return lastRefresh;
+    }
+
+    public void setLastRefresh(Date lastRefresh) {
+        this.lastRefresh = lastRefresh;
+    }
+
+    public String getWindSpeed() {
+        return windSpeed;
+    }
+
+    public void setWindSpeed(String windSpeed) {
+        this.windSpeed = windSpeed;
+    }
+
+    public String getWeatherIdentifier() {
+        return weatherIdentifier;
+    }
+
+    public void setWeatherIdentifier(String weatherIdentifier) {
+        this.weatherIdentifier = weatherIdentifier;
+    }
+
+    @NonNull
     @Override
     public String toString() {
         return "WeatherData{" +
@@ -143,8 +179,12 @@ public class WeatherData {
                 ", idWeatherType=" + idWeatherType +
                 ", classWindSpeed=" + classWindSpeed +
                 ", longitude='" + longitude + '\'' +
-                ", forecastDate='" + forecastDate + '\'' +
                 ", latitude='" + latitude + '\'' +
+                ", forecastDate='" + forecastDate + '\'' +
+                ", globalIdLocal=" + globalIdLocal +
+                ", lastRefresh=" + lastRefresh +
+                ", windSpeed='" + windSpeed + '\'' +
+                ", weatherIdentifier='" + weatherIdentifier + '\'' +
                 '}';
     }
 }

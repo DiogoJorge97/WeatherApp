@@ -10,34 +10,30 @@
         android:id="@+id/t_max"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="Tmax"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/wind_speed"
-        app:layout_constraintStart_toEndOf="@+id/textView7"
-        app:layout_constraintTop_toBottomOf="@+id/date" />
+        android:text="@string/tmax"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/weather_type"
+        app:layout_constraintTop_toBottomOf="@+id/weather_type" />
 
     <TextView
         android:id="@+id/t_min"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Tmin"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="@+id/t_max"
-        app:layout_constraintStart_toStartOf="@+id/t_max"
-        app:layout_constraintTop_toBottomOf="@+id/t_max" />
+        android:layout_marginStart="16dp"
+        android:text="@string/tmin"
+        android:textSize="16sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/t_max"
+        app:layout_constraintStart_toEndOf="@+id/t_max" />
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="41dp"
         android:layout_height="29dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date"
+        app:layout_constraintTop_toTopOf="@+id/wind_speed"
         app:srcCompat="@mipmap/ic_rain" />
 
     <TextView
@@ -45,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="precProb"
+        android:text="@string/precprob"
         app:layout_constraintEnd_toEndOf="@+id/imageView2"
         app:layout_constraintStart_toStartOf="@+id/imageView2"
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
@@ -65,8 +61,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:layout_marginEnd="8dp"
-        android:text="WindSpeed"
+        android:layout_marginEnd="48dp"
+        android:text="@string/windspeed"
         app:layout_constraintEnd_toStartOf="@+id/imageView2"
         app:layout_constraintTop_toBottomOf="@+id/date" />
 
@@ -75,7 +71,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:text="Direction"
+        android:text="@string/direction"
         app:layout_constraintEnd_toEndOf="@+id/imageView3"
         app:layout_constraintStart_toStartOf="@+id/imageView3"
         app:layout_constraintTop_toBottomOf="@+id/imageView3" />
@@ -84,19 +80,10 @@
         android:id="@+id/weather_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="WeatherType"
-        app:layout_constraintEnd_toEndOf="@+id/textView7"
-        app:layout_constraintStart_toStartOf="@+id/textView7"
-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
-
-    <TextView
-        android:id="@+id/textView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Main Icon Forecast"
+        android:layout_marginTop="12dp"
+        android:text="@string/weathertype"
+        android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/date" />
 
@@ -107,19 +94,22 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:text="DAY"
+        android:background="@color/colorAccent"
+        android:text="@string/day"
         android:textAlignment="center"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <View
         android:id="@+id/divider"
         android:layout_width="368dp"
         android:layout_height="1dp"
+        android:layout_marginTop="6dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/wind_direction" />
 
 </android.support.constraint.ConstraintLayout>

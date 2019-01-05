@@ -4,7 +4,7 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Distrit {
+public class WindSpeed {
 
     @SerializedName("owner")
     @Expose
@@ -14,7 +14,7 @@ public class Distrit {
     private String country;
     @SerializedName("data")
     @Expose
-    private List<DistritsData> data = null;
+    private List<WindSpeedData> data = null;
 
     public String getOwner() {
         return owner;
@@ -32,11 +32,11 @@ public class Distrit {
         this.country = country;
     }
 
-    public List<DistritsData> getData() {
+    public List<WindSpeedData> getData() {
         return data;
     }
 
-    public void setData(List<DistritsData> data) {
+    public void setData(List<WindSpeedData> data) {
         this.data = data;
     }
 
